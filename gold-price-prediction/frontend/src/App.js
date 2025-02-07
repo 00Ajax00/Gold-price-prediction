@@ -1,19 +1,30 @@
-
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 function App() {
-    const [price, setPrice] = useState(null);
+    const [inputData, setInputData] = useState("");
+    const [prediction, setPrediction] = useState(null);
 
-    useEffect(() => {
-        fetch("http://localhost:8000/predict")
-            .then((res) => res.json())
-            .then((data) => setPrice(data.predicted_price));
-    }, []);
+    const handlePredict = async () => {
+        const response = await fetch("http://localhost:8000/predict/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify([parseFloat(inputData)]),
+        });
+        const data = await response.json();
+        setPrediction(data.prediction);
+    };
 
     return (
-        <div>
-            <h1>Gold Price Prediction</h1>
-            <p>Predicted Price: {price}</p>
+        <div style={{ textAlign: "center", padding: "20px" }}>
+            <h2>Gold Price Prediction</h2>
+            <input
+                type="number"
+                value={inputData}
+                onChange={(e) => setInputData(e.target.value)}
+                placeholder="Enter recent gold price"
+            />
+            <button onClick={handlePredict}>Predict</button>
+            {prediction && <h3>Predicted Price: {prediction[0]}</h3>}
         </div>
     );
 }

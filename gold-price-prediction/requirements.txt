@@ -1,10 +1,12 @@
 fastapi
 uvicorn
 tensorflow
+scikit-learn
 numpy
 requests
 beautifulsoup4
-react
+pandas
+
 
 # Dockerfile
 FROM python:3.9
